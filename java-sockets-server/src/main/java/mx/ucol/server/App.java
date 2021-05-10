@@ -8,18 +8,14 @@ public class App {
         ServerSocket serverSocket;
         Socket socket;
         int port = 3000;
-        DataInputStream inputStream;
-        String inputData;
 
         try {
             serverSocket = new ServerSocket(port);
             socket = serverSocket.accept();
-            inputStream = new DataInputStream(socket.getInputStream());
-            System.out.println("Before");
-            inputData = (String) inputStream.readUTF();
-            System.out.println("After");
-            System.out.println("Received message: " + inputData);
-            serverSocket.close();
+            SenderM sender = new SenderM(socket);
+            ReceiverM receiver = new ReceiverM(socket);
+            new Thread(sender).start();
+            new Thread(receiver).start();
         } catch (IOException e) {
             System.err.print(e);
         }
